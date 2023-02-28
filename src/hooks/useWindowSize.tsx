@@ -7,7 +7,7 @@ export const useWindowSize = () => {
     width: number;
     height: number;
   }>({
-    width: 900,
+    width: 0,
     height: 1080,
   });
   useEffect(() => {

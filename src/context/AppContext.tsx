@@ -29,6 +29,7 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
   const { width } = useWindowSize();
 
   useEffect(() => {
+    console.log(width);
     if (width < 600) {
       setTileSize(60);
     } else if (width >= 600 && width < 900) {
@@ -37,6 +38,11 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
       setTileSize(120);
     }
   }, [width]);
+
+  if (width === 0) {
+    return <>...</>;
+  }
+
   return (
     <Context.Provider
       value={{
