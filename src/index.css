@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+[data-difficulty='3'] {
+  --count: 3;
+}
+[data-difficulty='4'] {
+  --count: 4;
+}
+[data-difficulty='5'] {
+  --count: 5;
+}
+[data-difficulty='6'] {
+  --count: 6;
+}
+[data-size='120'] {
+  --size: 120px;
+  --gap: 0.4rem;
+}
+[data-size='90'] {
+  --size: 90px;
+  --gap: 0.3rem;
+}
+[data-size='60'] {
+  --size: 60px;
+  --gap: 0.2rem;
+}
+
+:root {
+  --pc: #fd6f88;
+  --sc: #c2a738;
+  --dark: #121212;
+  --dark2: #2e2e2e;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  color: var(--dark2);
+  background-color: var(--dark);
+}
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: auto;
+  width: calc(var(--size) * var(--count) + var(--gap) * 2);
+  height: calc(var(--size) * var(--count));
+}
+
+.header {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  font-family: 'Nerko One', cursive;
+}
+.scoreboard {
+  margin-bottom: calc(var(--gap) * 4);
+  padding: calc(var(--gap) * 2);
+  background-color: var(--dark2);
+  width: 100%;
+  border-radius: var(--gap);
+  color: var(--dark);
+}
+.container {
+  position: relative;
+  background-color: var(--dark2);
+  border-radius: var(--gap);
+  outline: var(--gap) solid var(--dark2);
+  width: calc(var(--size) * var(--count));
+  height: calc(var(--size) * var(--count));
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  padding: var(--gap);
+  box-sizing: border-box;
+  transition: transform ease 0.3s;
+  width: var(--size);
+  height: var(--size);
+}
+
+.tile .value {
+  font-family: 'Nerko One', cursive;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--pc);
+  font-size: 4rem;
+  border-radius: var(--gap);
+}
+.tile.correct .value {
+  background-color: var(--sc);
+}
+.tile .cd {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 14px;
+  visibility: hidden;
+}
+.empty {
+  visibility: hidden;
+  /* opacity: 0.5; */
+}
+@media only screen and (max-width: 900px) {
+  .tile .value {
+    font-size: 3rem;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .tile .value {
+    font-size: 2rem;
+  }
+}
+
+.debug {
+  position: absolute;
+  left: 0;
+  height: 100vh;
+  background: #000;
+  color: white;
+  overflow-y: scroll;
+  width: 300px;
+}
