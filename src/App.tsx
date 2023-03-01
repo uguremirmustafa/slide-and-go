@@ -1,4 +1,5 @@
 import 'animate.css';
+import { PlayIcon } from 'assets/icons';
 import Header from 'components/Header';
 import ScoreBoard from 'components/ScoreBoard';
 import TileComponent from 'components/TileComponent';
@@ -8,7 +9,7 @@ import { Direction, GameState, Tile } from 'types';
 import { getTileKey, getTiles, move, shuffle } from './utils/helpers';
 
 function App() {
-  const { difficulty, gameState, tileSize } = useApp();
+  const { difficulty, gameState, setGameState, tileSize } = useApp();
 
   const numbers = Array.from(Array(difficulty * difficulty).keys()).map((x) => x + 1);
 
@@ -16,6 +17,13 @@ function App() {
   const [initialTiles, setInitialTiles] = useState<Tile[]>([]);
 
   // const [history, setHistory] = useState<Direction[]>([]);
+
+  function startGame() {
+    setGameState('STARTED');
+  }
+  function pauseGame() {
+    setGameState('PAUSED');
+  }
 
   function handlePress(event: KeyboardEvent) {
     let direction: undefined | Direction;
@@ -37,6 +45,7 @@ function App() {
         break;
     }
     if (direction) {
+      startGame();
       // setHistory((old) => [direction, ...old] as Direction[]);
       move(direction, tiles, setTiles, difficulty);
     }
@@ -65,11 +74,19 @@ function App() {
             }
             return <TileComponent tile={t} key={getTileKey(t)} />;
           })}
+          {gameState === 'PAUSED' && (
+            <div className="pause-container" onClick={startGame}>
+              <PlayIcon size={144} />
+              continue
+            </div>
+          )}
         </div>
-
-        {/* <button onClick={shuffleTiles}>New Game</button>
-        <button onClick={() => setTiles(initialTiles)}>Back to initial</button>
-        <pre>{JSON.stringify(gameState, null, 2)}</pre> */}
+        <br />
+        {gameState === 'STARTED' && (
+          <button onClick={pauseGame} className="flex btn btn-xl btn-block">
+            pause
+          </button>
+        )}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import { useWindowSize } from 'hooks/useWindowSize';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { Difficulty, GameState, TileSize } from 'types';
 
 interface ContextInterface {
@@ -9,6 +9,8 @@ interface ContextInterface {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
   tileSize: TileSize;
   setTileSize: React.Dispatch<React.SetStateAction<TileSize>>;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const initialValues: ContextInterface = {
@@ -18,15 +20,32 @@ const initialValues: ContextInterface = {
   setGameState: () => {},
   setTileSize: () => {},
   tileSize: 120,
+  time: 0,
+  setTime: () => {},
 };
 
 const Context = createContext<ContextInterface>(initialValues);
 
 export const AppWrapper = ({ children }: { children: ReactNode }) => {
+  const [time, setTime] = useState(0);
   const [tileSize, setTileSize] = useState<TileSize>(120);
   const [difficulty, setDifficulty] = useState<3 | 4 | 5 | 6>(5);
   const [gameState, setGameState] = useState<GameState>('IDLE');
   const { width } = useWindowSize();
+
+  const contextValue = useMemo(
+    () => ({
+      difficulty,
+      setDifficulty,
+      gameState,
+      setGameState,
+      tileSize,
+      setTileSize,
+      time,
+      setTime,
+    }),
+    [difficulty, setDifficulty, gameState, setGameState, tileSize, setTileSize, time, setTime]
+  );
 
   useEffect(() => {
     console.log(width);
@@ -43,20 +62,7 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
     return <>...</>;
   }
 
-  return (
-    <Context.Provider
-      value={{
-        difficulty,
-        setDifficulty,
-        gameState,
-        setGameState,
-        tileSize,
-        setTileSize,
-      }}
-    >
-      {children}
-    </Context.Provider>
-  );
+  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };
 export const useApp = () => {
   const context = useContext(Context);

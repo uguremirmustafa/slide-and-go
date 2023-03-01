@@ -29,9 +29,11 @@
   --sc: #c2a738;
   --dark: #121212;
   --dark2: #2e2e2e;
+  --light: #f3f3f3;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
+  font-weight: 700;
 
   color-scheme: light dark;
 
@@ -43,6 +45,40 @@
 
   color: var(--dark2);
   background-color: var(--dark);
+}
+.badge,
+.btn,
+.icon-btn {
+  background-color: var(--dark2);
+  font-weight: 700;
+  border: none;
+  height: 2.5rem;
+  padding: calc(var(--gap) * 2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--gap);
+  color: white;
+  fill: white;
+}
+.btn,
+.icon-btn {
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: var(--pc);
+}
+
+.btn-lg {
+  font-size: 1.25rem;
+}
+.btn-xl {
+  font-size: 2.25rem;
+  height: 3.5rem;
+}
+.btn-block {
+  width: 100%;
+  border-radius: var(--gap);
 }
 
 *,
@@ -70,12 +106,25 @@
 }
 .scoreboard {
   margin-bottom: calc(var(--gap) * 4);
-  padding: calc(var(--gap) * 2);
-  background-color: var(--dark2);
   width: 100%;
-  border-radius: var(--gap);
-  color: var(--dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+.flex {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.paper {
+  padding: var(--gap) calc(var(--gap) * 2);
+  background-color: var(--dark2);
+  border: none;
+  border-radius: var(--gap);
+  color: var(--light);
+}
+
 .container {
   position: relative;
   background-color: var(--dark2);
@@ -83,6 +132,26 @@
   outline: var(--gap) solid var(--dark2);
   width: calc(var(--size) * var(--count));
   height: calc(var(--size) * var(--count));
+}
+.pause-container {
+  width: calc(var(--size) * var(--count));
+  height: calc(var(--size) * var(--count));
+  border-radius: var(--gap);
+  background-color: rgba(255, 255, 255, 0.2);
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  font-size: 2rem;
+  color: var(--light);
+}
+.pause-container svg {
+  fill: var(--light);
 }
 
 .tile {
