@@ -1,4 +1,5 @@
-export type Difficulty = 3 | 4 | 5 | 6;
+export const difficultyLevels = [3, 4, 5, 6] as const;
+export type Difficulty = typeof difficultyLevels[number];
 export type TileSize = 60 | 90 | 120;
 
 export interface Tile {

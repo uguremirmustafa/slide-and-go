@@ -48,7 +48,6 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    console.log(width);
     if (width < 600) {
       setTileSize(60);
     } else if (width >= 600 && width < 900) {

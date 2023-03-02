@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+@import './assets/reset.css';
+@import './assets/colors.css';
+
 [data-difficulty='3'] {
   --count: 3;
 }
@@ -25,14 +28,7 @@
 }
 
 :root {
-  --pc: #fd6f88;
-  --sc: #c2a738;
-  --dark: #121212;
-  --dark2: #2e2e2e;
-  --light: #f3f3f3;
-
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
   font-weight: 700;
 
   color-scheme: light dark;
@@ -73,20 +69,12 @@
   font-size: 1.25rem;
 }
 .btn-xl {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   height: 3.5rem;
 }
 .btn-block {
   width: 100%;
   border-radius: var(--gap);
-}
-
-*,
-*::after,
-*::before {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
 }
 
 .app {
@@ -134,14 +122,14 @@
   height: calc(var(--size) * var(--count));
 }
 .pause-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
   width: calc(var(--size) * var(--count));
   height: calc(var(--size) * var(--count));
   border-radius: var(--gap);
   background-color: rgba(255, 255, 255, 0.2);
-  position: absolute;
-  z-index: 100;
-  top: 0;
-  left: 0;
   display: flex;
   justify-content: center;
   flex-direction: column;

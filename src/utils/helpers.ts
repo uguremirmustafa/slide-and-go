@@ -13,7 +13,10 @@ export function shuffle(array_elements: number[]) {
   return array_elements;
 }
 
-export const getTiles = (numbers: number[], difficulty: Difficulty) => {
+export const getTiles = (difficulty: Difficulty, ordered?: true) => {
+  const orderedNumbers = Array.from(Array(difficulty * difficulty).keys()).map((x) => x + 1);
+  const numbers = ordered ? orderedNumbers : shuffle(orderedNumbers);
+
   const tiles: Tile[] = [];
 
   for (let i = 0; i < difficulty; i++) {
@@ -35,7 +38,8 @@ export const move = (
   direction: Direction,
   tiles: Tile[],
   setTiles: (value: React.SetStateAction<Tile[]>) => void,
-  difficulty: Difficulty
+  difficulty: Difficulty,
+  setHistory: React.Dispatch<React.SetStateAction<Direction[]>>
 ): void => {
   const et = tiles.find((x) => x.val === difficulty * difficulty) as Tile;
   let tileToBeUpdated: Tile | undefined = undefined;
@@ -80,9 +84,14 @@ export const move = (
         }
       })
     );
+    setHistory((old) => [direction, ...old]);
   }
 };
 
 export const getTileKey = (tile: Tile) => {
   return `${tile.x}_${tile.y}_${tile.val}`;
+};
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };

@@ -15,10 +15,12 @@ function TileComponent(props: IProps) {
 
   return (
     <div
-      className={`tile ${tile.swapped ? 'animate__animated animate__bounceIn' : ''} ${
-        isInCorrectPlace ? 'correct' : ''
-      }`}
       key={key}
+      className={`
+        tile 
+        ${tile.swapped ? 'animate__animated animate__bounceIn' : ''} 
+        ${isInCorrectPlace ? 'correct' : ''}
+      `}
       style={{ top: tile.y * tileSize, left: tile.x * tileSize }}
     >
       <span className="cd">{`${tile.x}_${tile.y}`}</span>
