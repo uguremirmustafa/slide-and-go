@@ -19,6 +19,7 @@ function App() {
   const { tiles, setTiles } = useTiles();
 
   function handlePress(event: KeyboardEvent) {
+    event.preventDefault();
     const direction = getDirection(event);
     if (direction && !modal) {
       setGameState('STARTED');
