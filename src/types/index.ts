@@ -7,6 +7,7 @@ export interface Tile {
   y: number;
   val: number;
   swapped: boolean;
+  isCorrect: boolean;
 }
 
 export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';

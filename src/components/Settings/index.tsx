@@ -4,16 +4,19 @@ import { Difficulty, difficultyLevels } from 'types';
 
 function Settings() {
   const { setDifficulty, difficulty, setGameState } = useApp();
-  const [diff, setDiff] = useState(difficulty);
+
+  function changeDifficulty() {
+    // warn user before changing the difficulty
+  }
 
   return (
     <div>
-      <div>
-        <label htmlFor="difficulty">Select difficulty</label>
-      </div>
-      <br />
+      <label className="block mb-1 font-normal" htmlFor="difficulty">
+        Difficulty
+      </label>
       <select
         name="difficulty"
+        className="w-60 p-1 rounded"
         id="difficulty"
         value={difficulty}
         onChange={(e) => {
@@ -28,6 +31,9 @@ function Settings() {
           );
         })}
       </select>
+      <caption className="text-xs font-normal text-purple-600 flex w-full mt-1">
+        Changing difficulty will end current game!
+      </caption>
     </div>
   );
 }

@@ -1,53 +1,28 @@
-import 'animate.css';
-import { PlayIcon } from 'assets/icons';
-import Header from 'components/Header';
 import Modal from 'components/Modal';
-import ScoreBoard from 'components/ScoreBoard';
 import Settings from 'components/Settings';
-import TileComponent from 'components/TileComponent';
+import GameOver from 'components/GameOver';
+import Box from 'components/Box';
 import { useApp } from 'context/AppContext';
 import { useModal } from 'context/ModalContext';
-import { useEffect, useState } from 'react';
-import { Direction, Tile } from 'types';
-import { getTileKey, getTiles, move, shuffle } from './utils/helpers';
+import { useEffect } from 'react';
+import { getDirection, getTileKey, getTiles, move } from './utils/helpers';
+import useTiles from 'hooks/useTiles';
+import Controller from 'components/Controller';
+import Confirm from 'components/Confirm';
+import ScoreBoard from 'components/ScoreBoard';
+import Keyboard from 'components/Keyboard';
 
 function App() {
-  const { difficulty, gameState, setGameState, tileSize } = useApp();
-  const { modal } = useModal();
+  const { difficulty, gameState, setGameState, tileSize, setTime, setHistory } = useApp();
+  const { modal, setModal } = useModal();
 
-  const [tiles, setTiles] = useState<Tile[]>(getTiles(difficulty));
-  const [history, setHistory] = useState<Direction[]>([]);
-  function startGame() {
-    setGameState('STARTED');
-  }
-
-  function pauseGame() {
-    setGameState('PAUSED');
-  }
+  const { tiles, setTiles } = useTiles();
 
   function handlePress(event: KeyboardEvent) {
-    if (gameState === 'STARTED') {
-      let direction: undefined | Direction;
-      switch (event.key) {
-        case 'ArrowUp':
-          direction = 'UP';
-          break;
-        case 'ArrowDown':
-          direction = 'DOWN';
-          break;
-        case 'ArrowLeft':
-          direction = 'LEFT';
-          break;
-        case 'ArrowRight':
-          direction = 'RIGHT';
-          break;
-        default:
-          console.error('wrong key');
-          break;
-      }
-      if (direction) {
-        move(direction, tiles, setTiles, difficulty, setHistory);
-      }
+    const direction = getDirection(event);
+    if (direction && !modal) {
+      setGameState('STARTED');
+      move(direction, tiles, setTiles, difficulty, setHistory, setGameState);
     }
   }
 
@@ -57,41 +32,42 @@ function App() {
   }, [handlePress]);
 
   useEffect(() => {
-    setTiles(getTiles(difficulty, true));
+    setTime(0);
+    setHistory([]);
+    setGameState('IDLE');
+    const correctLayout = getTiles(difficulty);
+    setTiles(correctLayout);
   }, [difficulty]);
+
+  useEffect(() => {
+    if (gameState === 'OVER') {
+      setModal({ type: 'GAMEOVER', title: 'Game over' });
+    }
+  }, [gameState]);
 
   return (
     <>
-      <Modal>{modal?.type === 'SETTINGS' && <Settings />}</Modal>
-      <div className="app" data-difficulty={difficulty} data-size={tileSize}>
-        <Header />
-        <ScoreBoard setTiles={setTiles} moveCount={history.length} />
-        <div className="container">
+      <Modal>
+        {modal?.type === 'INFO' && <Keyboard />}
+        {modal?.type === 'RESTART' && <Confirm setTiles={setTiles} />}
+        {modal?.type === 'SETTINGS' && <Settings />}
+        {modal?.type === 'GAMEOVER' && <GameOver setTiles={setTiles} />}
+      </Modal>
+      <div
+        className="app flex flex-col gap-6 p-2 !pt-5"
+        data-difficulty={difficulty}
+        data-size={tileSize}
+      >
+        <ScoreBoard />
+        <div className="container bg-gray-700/30 ring-4 ring-gray-700/30">
           {tiles.map((t) => {
             if (t.val === difficulty * difficulty) {
-              return <TileComponent tile={t} key={getTileKey(t)} isEmpty />;
+              return <Box tile={t} key={getTileKey(t)} isEmpty />;
             }
-            return <TileComponent tile={t} key={getTileKey(t)} />;
+            return <Box tile={t} key={getTileKey(t)} />;
           })}
-          {gameState === 'PAUSED' && (
-            <div className="pause-container" onClick={startGame}>
-              <PlayIcon size={144} />
-              continue
-            </div>
-          )}
-          {gameState === 'IDLE' && (
-            <div className="pause-container" onClick={startGame}>
-              <PlayIcon size={144} />
-              start
-            </div>
-          )}
         </div>
-        <br />
-        {gameState === 'STARTED' && (
-          <button onClick={pauseGame} className="flex btn btn-xl btn-block">
-            pause
-          </button>
-        )}
+        <Controller setTiles={setTiles} />
       </div>
     </>
   );

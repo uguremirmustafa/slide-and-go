@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { Difficulty, GameState, TileSize } from 'types';
 
 interface ModalProps {
-  type: 'SETTINGS';
+  type: 'SETTINGS' | 'GAMEOVER' | 'RESTART' | 'INFO';
   title: string;
 }
 
@@ -13,14 +13,14 @@ interface ContextInterface {
 }
 
 const initialValues: ContextInterface = {
-  modal: null,
+  modal: { title: 'Welcome', type: 'INFO' },
   setModal: () => {},
 };
 
 const Context = createContext<ContextInterface>(initialValues);
 
 export const ModalContext = ({ children }: { children: ReactNode }) => {
-  const [modal, setModal] = useState<ModalProps | null>(null);
+  const [modal, setModal] = useState<ModalProps | null>(initialValues.modal);
   return <Context.Provider value={{ modal, setModal }}>{children}</Context.Provider>;
 };
 export const useModal = () => {

@@ -1,6 +1,7 @@
+import useLocalState from 'hooks/useLocalState';
 import { useWindowSize } from 'hooks/useWindowSize';
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { Difficulty, GameState, TileSize } from 'types';
+import { Difficulty, Direction, GameState, TileSize } from 'types';
 
 interface ContextInterface {
   difficulty: Difficulty;
@@ -11,6 +12,8 @@ interface ContextInterface {
   setTileSize: React.Dispatch<React.SetStateAction<TileSize>>;
   time: number;
   setTime: React.Dispatch<React.SetStateAction<number>>;
+  history: Direction[];
+  setHistory: React.Dispatch<React.SetStateAction<Direction[]>>;
 }
 
 const initialValues: ContextInterface = {
@@ -22,14 +25,17 @@ const initialValues: ContextInterface = {
   tileSize: 120,
   time: 0,
   setTime: () => {},
+  history: [],
+  setHistory: () => {},
 };
 
 const Context = createContext<ContextInterface>(initialValues);
 
 export const AppWrapper = ({ children }: { children: ReactNode }) => {
   const [time, setTime] = useState(0);
+  const [history, setHistory] = useState<Direction[]>([]);
   const [tileSize, setTileSize] = useState<TileSize>(120);
-  const [difficulty, setDifficulty] = useState<3 | 4 | 5 | 6>(5);
+  const [difficulty, setDifficulty] = useLocalState<3 | 4 | 5 | 6>('slidgo_difficulty', 4);
   const [gameState, setGameState] = useState<GameState>('IDLE');
   const { width } = useWindowSize();
 
@@ -43,8 +49,21 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
       setTileSize,
       time,
       setTime,
+      history,
+      setHistory,
     }),
-    [difficulty, setDifficulty, gameState, setGameState, tileSize, setTileSize, time, setTime]
+    [
+      difficulty,
+      setDifficulty,
+      gameState,
+      setGameState,
+      tileSize,
+      setTileSize,
+      time,
+      setTime,
+      history,
+      setHistory,
+    ]
   );
 
   useEffect(() => {
